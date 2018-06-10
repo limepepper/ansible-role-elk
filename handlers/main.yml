@@ -1,0 +1,29 @@
+---
+
+- name: restart kibana
+  service: name=kibana state=restarted
+  become: true
+
+- name: restart logstash
+  service: name=logstash state=restarted
+  become: true
+
+- name: restart filebeat
+  service: name=filebeat state=restarted
+  become: true
+
+- name: restart elasticsearch
+  service: name=elasticsearch state=restarted
+  become: true
+
+- name: Wait 300 seconds for port 9200
+  wait_for:
+    port: 9200
+    delay: 10
+  listen: restart elasticsearch
+
+- name: Wait 300 seconds for port 9300
+  wait_for:
+    port: 9300
+    delay: 10
+  listen: restart elasticsearch

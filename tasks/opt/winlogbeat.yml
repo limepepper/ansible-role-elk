@@ -1,0 +1,73 @@
+---
+
+- tags: [ winfilebeat ]
+  block:
+
+  - debug:
+      msg: here be in windows message bollocks
+
+#  - win_chocolatey: name=pscx
+
+  - name: Create directory structure
+    win_file:
+      path: "{{ winfilebeat_path }}"
+      state: directory
+
+  - name: Add a powershell module PowerShellGet
+    win_psmodule:
+      name: PowerShellGet
+      state: present
+
+  - name: run Install-Module pscx
+    win_shell: |
+      Install-Module pscx
+      Install-Module Pscx -Scope CurrentUser
+
+  - name: run download zabbixd
+    win_shell: |
+
+        $url = "https://artifacts.elastic.co/downloads/beats/winlogbeat/winlogbeat-6.2.3-windows-x86_64.zip"
+        $output = "C:\Temp\winlogbeat-6.2.3-windows-x86_64.zip"
+        $start_time = Get-Date
+
+        Invoke-WebRequest -Uri $url -OutFile $output
+        Write-Output "Time taken: $((Get-Date).Subtract($start_time).Seconds) second(s)"
+
+    args:
+      creates: C:\Temp\winlogbeat-6.2.3-windows-x86_64.zip
+    # when: "true == false"
+
+  - name: Unzip a bz2 (BZip) file
+    win_unzip:
+      src: C:\Temp\winlogbeat-6.2.3-windows-x86_64.zip
+      dest: "{{ winfilebeat_path }}"
+      creates: '{{ winfilebeat_path }}\binxx'
+
+  - name: install the config template
+    win_template:
+      src: filebeat/winlogbeat.yml
+      dest: '{{ winfilebeat_path }}\winlogbeat.yml'
+      newline_sequence: '\n'
+    notify: restart win-zabbix-agent
+
+  - name: Check if Winlogbeat service is installed
+    win_service:
+      name: Winlogbeat
+    register: Winlogbeat_service_info
+
+  - name: install Winlogbeat_service_info agent service
+    win_shell: |
+
+        cd {{ winfilebeat_path }}\winlogbeat-6.2.3-windows-x86_64\
+        .\install-service-winlogbeat.ps1
+
+    args:
+      executable: cmd
+
+    when: not Winlogbeat_service_info.exists
+
+  # - name: Set service startup mode to auto and ensure it is started
+  #   win_service:
+  #     name: Zabbix Agent
+  #     start_mode: auto
+  #     state: started

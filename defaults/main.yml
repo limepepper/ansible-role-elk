@@ -1,0 +1,5 @@
+---
+# defaults file for limepepper.elk
+
+loghost: localhost
+elk_features: []

@@ -1,0 +1,29 @@
+---
+
+- name: install deps for java
+  package:
+    name:
+    - openjdk-8-jdk-headless
+
+# wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+
+- name: Add an Apt signing key for elasticsearch
+  apt_key:
+    id: D88E42B4
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+
+# sudo apt-get install apt-transport-https
+
+- name: install apt-transport-https
+  package:
+    name: apt-transport-https
+    state: present
+
+#echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list
+
+- apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/6.x/apt stable main
+    state: present
+    filename: 'elastic-6.x'

@@ -1,0 +1,28 @@
+---
+
+
+- name: kibana main block
+  become: yes
+  tags: [ elasticsearch-head ]
+  block:
+
+
+  - include_role:
+      name: nodejs
+
+
+  ## https://github.com/mobz/elasticsearch-head
+
+  # git clone git://github.com/mobz/elasticsearch-head.git
+  - name: get elastic search head
+    git:
+      repo: 'https://github.com/mobz/elasticsearch-head.git'
+      dest: /var/cache/ansible/git/elasticsearch-head
+      #update: yes
+
+
+  - name: Install packages based on package.json.
+    npm:
+      path: /var/cache/ansible/git/elasticsearch-head
+
+

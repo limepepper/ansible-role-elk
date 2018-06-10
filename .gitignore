@@ -1,3 +1,8 @@
+# chef/kitchen
+
+.kitchen/
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

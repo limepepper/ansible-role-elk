@@ -1,0 +1,63 @@
+---
+
+
+- name: logstash main block
+  become: yes
+  tags: [ logstash ]
+  block:
+
+  - name: logstash
+    action: >
+      {{ ansible_pkg_mgr }} name={{ item }} state=present
+    with_flattened:
+      - logstash
+    tags:
+      - pkgs
+
+#    when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
+
+  - name: make dirs certs for logstash
+    file:
+      path: "{{ item.dest }}"
+      state: directory
+
+    with_items:
+      - dest: /var/cache/ansible/ssl/crt/
+      - dest: /var/cache/ansible/ssl/private/
+
+
+  - name: copy certs for logstash
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: root
+      group: root
+      mode: 0644
+    with_items:
+      - src: ssl/elasticsearch.crt
+        dest: /var/cache/ansible/ssl/crt/elasticsearch.crt
+      - src: ssl/elasticsearch.pem
+        dest: /var/cache/ansible/ssl/private/elasticsearch.pem
+    notify:
+    - restart logstash
+
+  - name: create files for logstash
+    template:
+      src: "logstash/{{ item }}"
+      dest: "/etc/logstash/conf.d/{{ item }}"
+      owner: root
+      group: root
+      mode: 0644
+    with_items:
+      - 10-syslog-filter.conf
+      - 02-beats-input.conf
+      - 30-elasticsearch-output.conf
+    notify:
+    - restart logstash
+    tags:
+      - config
+
+  - service:
+      name: logstash
+      state: started
+      enabled: yes

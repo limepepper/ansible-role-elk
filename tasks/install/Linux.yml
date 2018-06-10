@@ -1,0 +1,13 @@
+---
+
+- name: linux generic main block
+  become: yes
+  tags: [ debug, tools ]
+  block:
+
+  - include_role:
+      name: limepepper.java
+    vars:
+      java_version: 1.8
+      java_flavor: openjdk
+    tags: always

@@ -1,0 +1,36 @@
+---
+
+
+- name: kibana main block
+  become: yes
+  tags: [ kibana ]
+  block:
+  - name: kibana
+    action: >
+      {{ ansible_pkg_mgr }} name={{ package }} state=present
+    with_items:
+      - kibana
+    loop_control:
+      loop_var: package
+    tags: 
+      - pkgs
+
+  - name: configure kibana settings
+    template:
+      src: kibana/kibana.yml
+      dest: /etc/kibana/kibana.yml
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+    - restart kibana
+    tags:
+      - config
+
+
+  - service:
+      name: kibana
+      state: started
+      enabled: yes
+
+

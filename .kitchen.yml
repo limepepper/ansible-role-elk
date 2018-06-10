@@ -1,0 +1,87 @@
+---
+
+driver:
+  name: vagrant
+
+transport:
+  max_ssh_sessions: 5
+
+provisioner:
+  name: ansible_push
+  playbook: tests/test.yml
+  chef_bootstrap_url: nil
+  # ansible_config      : "/path/to/ansible/ansible.cfg"
+  verbose: "<%= ENV.key?('ANSIBLE_Vs') ? ENV['ANSIBLE_Vs'] : 'vv' %>"
+  tags: <%= ENV['ANSIBLE_TAGS'] %>
+  skip_tags: <%= ENV['ANSIBLE_SKIP_TAGS'] %>
+  extra_vars:
+    ara_enabled: true
+    elk_features:
+      - elasticsearch
+
+platforms:
+  # problem with networking on Vbox with 17.19
+  - name: ubuntu-18.04
+  - name: ubuntu-17.10
+  - name: ubuntu-16.04
+  # - name: ubuntu-14.04
+  - name: centos-7
+  - name: centos-6
+  - name: fedora-27
+  - name: fedora-28
+  # - name: oracle-7.4
+  # - name: oracle-6.9
+  # - name: debian-8
+  - name: debian-9
+
+# kitchen-inspec expects test to be in test/integration/%suite%/inspec
+verifier:
+  name: inspec
+  sudo: true
+  # sudo_command: sudo -i -E
+  # sudo_options: -i -E
+  format: documentation
+  inspec_tests:
+    - tests/integration/inspec
+  attributes:
+    skiplist:
+      - mysql-skip-this
+  # skiplist:
+    # format: junit
+    # output: reports/inspec/junit/<%= Time.now.strftime("%Y_%m_%d") %>/%{platform}_%{suite}_<%= Time.now.strftime("%H_%M_%S") %>_inspec.xml
+    # format: json
+    # output: reports/inspec/json/%{platform}_%{suite}_<%= Time.now.strftime("%Y_%m_%d_T_%H_%M_%S") %>_inspec.json
+    # reporter: junit:./reports/inspec/junit/%{platform}_%{suite}_<%= Time.now.strftime("%Y_%m_%d_T_%H_%M_%S") %>_inspec.xml
+
+suites:
+  - name: default
+    extra_vars:
+      elk_features:
+        - elasticsearch
+  - name: elasticsearch
+    extra_vars:
+      elk_features:
+        - elasticsearch
+  - name: logstash
+    provisioner:
+    extra_vars:
+      elk_features:
+        - logstash
+  - name: kibana
+    provisioner:
+    extra_vars:
+      elk_features:
+        - kibana
+  - name: filebeat
+    provisioner:
+    extra_vars:
+      elk_features:
+        - filebeat
+  - name: fullstack-felk
+    provisioner:
+      extra_vars:
+        elk_features:
+          - filebeat
+          - elasticsearch
+          - logstash
+          - kibana

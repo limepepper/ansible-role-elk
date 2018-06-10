@@ -1,0 +1,69 @@
+---
+
+
+#sudo setsebool -P httpd_can_network_connect 1
+
+- seboolean:
+    name: httpd_can_network_connect
+    state: yes
+    persistent: yes
+  become: true
+  when: ansible_distribution == 'RedHat'
+
+- name: proxying for elastic search
+  include_role:
+    name: apache
+  vars:
+    enviro: dev
+    apache:
+      modules:
+      - proxy
+  tags: always
+
+- name: configure reverse proxy for elastic search
+  template:
+    src: templates/proxy-apache.conf.j2
+    dest: "{{ apache_site_conf_path }}/proxy-apache.conf"
+    owner: root
+    group: root
+    mode: 0644
+  vars:
+    enviro: dev
+    apache:
+      modules:
+      - proxy
+  notify:
+  - restart apache
+  tags:
+    - apache
+#  when: server_name is defined 
+
+
+- apache2_module:
+    state: present
+    name: proxy
+  notify:
+  - restart apache
+  tags:
+    - apache
+
+- apache2_module:
+    state: present
+    name: proxy_http
+  notify:
+  - restart apache
+  tags:
+    - apache
+
+    
+
+- name: enable the proxyconf
+  shell: |
+    /usr/sbin/a2ensite proxy-apache
+  register: stdout
+  notify:
+  - restart apache
+  when: ansible_os_family == 'Debian'
+  tags:
+    - apache
+

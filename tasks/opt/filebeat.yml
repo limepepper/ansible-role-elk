@@ -1,0 +1,104 @@
+---
+
+
+
+- name: filebeat main block
+  become: yes
+  tags: [ filebeat ]
+  block:
+
+  - name: filebeat package
+    action: >
+      {{ ansible_pkg_mgr }} name={{ item }} state=present
+    with_flattened:
+      - filebeat
+    tags: 
+      - pkgs
+
+
+  - name: gather os specific for apache for use in filebeat
+    include_vars: "{{ apache_vars }}"
+    with_first_found:
+      - files:
+        - "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yml"
+        - "{{ ansible_distribution }}.yml"
+        - "{{ ansible_os_family }}.yml"
+        paths:
+        - "../limepepper.apache/vars" 
+    loop_control:
+      loop_var: apache_vars
+
+  - file:
+      path: "/etc/filebeat/modules.d/apache2.yml.disabled"
+      state: absent
+
+  - name: create module config for apache2-filebeat
+    template: 
+      src: "templates/filebeat-apache2.yml"
+      dest: "/etc/filebeat/modules.d/apache2.yml"
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+    - restart filebeat
+
+
+  - name: create config for filebeat
+    template: 
+      src: "templates/{{ item }}"
+      dest: "/etc/filebeat/{{ item }}"
+      owner: root
+      group: root
+      mode: 0644
+    with_items:
+      - filebeat.yml
+    notify:
+    - restart filebeat
+    tags: 
+      - config
+
+  - name: filebeat service
+    service:
+      name: filebeat
+      state: started
+      enabled: yes
+
+
+#filebeat -c /etc/filebeat/filebeat.yml modules enable auditd icinga
+#filebeat -c /etc/filebeat/filebeat.yml modules enable apache2
+#./filebeat modules list
+#
+#
+#./filebeat setup -e
+# bin/elasticsearch-plugin install  ingest-user-agent
+ #ingest-user-agent and ingest-geoip
+
+
+- name: filebeat test block
+  become: yes
+  tags: [ filebeat-tests, tests ]
+  block:
+
+  - action: uri url=http://localhost/server-status return_content=yes
+    register: webpage
+
+  - fail: msg='service is not happy'
+    when: "'AWESOME' not in webpage.content"
+
+  - script: test_script1
+  - script: test_script2 --parameter value --parameter2 value
+
+  - shell: /usr/bin/some-command --parameter value
+    register: cmd_result
+
+  - assert:
+      that:
+        - "'not ready' not in cmd_result.stderr"
+        - "'gizmo enabled' in cmd_result.stdout"
+
+  - stat: path=/path/to/something
+    register: p
+
+  - assert:
+      that:
+        - p.stat.exists and p.stat.isdir

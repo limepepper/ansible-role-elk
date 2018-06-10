@@ -1,0 +1,76 @@
+---
+
+
+
+
+
+
+
+  #Now generate the SSL certificate and private key, in the appropriate locations (/etc/pki/tls/...), with the following command (substitute in the FQDN of the ELK Server):
+
+
+  #sudo openssl req -subj '/CN=ELK_server_fqdn/' -x509 -days 3650 -batch -nodes -newkey rsa:2048 -keyout private/logstash-forwarder.key -out certs/logstash-forwarder.crt
+
+  - name: ssl utils
+    action: >
+      {{ ansible_pkg_mgr }} name={{ item }} state=present
+    with_flattened:
+      - python-devel
+      - openssl-devel
+    tags: 
+      - pkgs
+      - ssl
+    when: ansible_distribution == 'CentOS'
+
+  - name: ssl utils
+    action: >
+      {{ ansible_pkg_mgr }} name={{ item }} state=present
+    with_flattened:
+      - python-dev
+  #    - openssl-dev
+    tags: 
+      - pkgs
+      - ssl
+    when: ansible_os_family == 'Debian'
+
+  - name: Force upgrade of pyOpenSSL on CentOS
+    pip:
+      name: pyOpenSSL
+      state: present
+      version: 17.5.0
+    # when: ansible_distribution == 'CentOS'
+    tags: 
+      - pkgs
+      - ssl
+
+  - name: create ssl dirs
+    file: dest=/var/cache/ansible/{{ item }}  state=directory
+    with_items:
+      - ssl/private
+      - ssl/csr
+      - ssl/crt
+    tags: 
+      - ssl
+
+
+
+  - openssl_privatekey:
+      path: /var/cache/ansible/ssl/private/elasticsearch.pem
+    tags: 
+      - ssl
+
+  - openssl_csr:
+      path: /var/cache/ansible/ssl/csr/elasticsearch.csr
+      privatekey_path: /var/cache/ansible/ssl/private/elasticsearch.pem
+      common_name: www.ansible.com
+    tags: 
+      - ssl
+
+  - name: Generate a Self Signed OpenSSL certificate
+    openssl_certificate:
+      path: /var/cache/ansible/ssl/crt/elasticsearch.crt
+      privatekey_path: /var/cache/ansible/ssl/private/elasticsearch.pem
+      csr_path: /var/cache/ansible/ssl/csr/elasticsearch.csr
+      provider: selfsigned
+    tags: 
+      - ssl

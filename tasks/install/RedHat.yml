@@ -1,0 +1,58 @@
+---
+
+
+- name: install deps for java
+  package:
+    name:
+    - java-1.8.0-openjdk-devel
+
+
+- name: add elasticsearch rpm key
+  rpm_key:
+    state: present
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+
+# [elasticsearch-6.x]
+# name=Elasticsearch repository for 6.x packages
+# baseurl=https://artifacts.elastic.co/packages/6.x/yum
+# gpgcheck=1
+# gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+# enabled=1
+# autorefresh=1
+# type=rpm-md
+
+- name: Add elasticsearch repository
+  yum_repository:
+    name: elasticsearch-6.x
+    description: Elasticsearch repository for 6.x packages
+    baseurl: https://artifacts.elastic.co/packages/6.x/yum
+    gpgcheck: yes
+    gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    enabled: yes
+
+
+- pam_limits:
+    domain: elasticsearch
+    limit_type: '-'
+    limit_item: "{{ item.name }}"
+    value: "{{ item.value }}"
+  with_items:
+    - { name: 'nproc', value: 4096 }
+    - { name: 'nofile', value: 65536 }
+  tags:
+    - config
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '6'
+
+
+- pam_limits:
+    domain: elasticsearch
+    limit_type: '-'
+    limit_item: "{{ item.name }}"
+    value: "{{ item.value }}"
+  with_items:
+    - { name: 'nproc', value: 4096 }
+    - { name: 'nofile', value: 65536 }
+  tags:
+    - config
+  when: ansible_distribution == 'CentOS' and ansible_distribution_major_version == '7'
