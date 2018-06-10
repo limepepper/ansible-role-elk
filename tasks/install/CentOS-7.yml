@@ -1,12 +1,10 @@
 ---
 
 
-- include_role:
-    name: limepepper.java
-  vars:
-    java_version: 1.8
-    java_flavor: openjdk
-  tags: always
+- name: install deps for java
+  package:
+    name:
+    - java-1.8.0-openjdk-devel
 
 - name: add elasticsearch rpm key
   rpm_key:
