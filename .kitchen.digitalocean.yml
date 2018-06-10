@@ -27,10 +27,9 @@ platforms:
   # - name: ubuntu-14
   - name: centos-7
   # - name: centos-6
-  - name: fedora-27-x64
   - name: fedora-27
   #- name: ubuntu-17-10-x64
-  - name: ubuntu-17-10-x64
+  #- name: ubuntu-17-10-x64
   - name: fedora-28
   # - name: oracle-7.4
   # - name: oracle-6.9

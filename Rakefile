@@ -28,21 +28,21 @@ desc 'Build VM with cookbook'
 task :converge do
   puts 'run kitchen tasks'
   sh 'KITCHEN_LOCAL_YAML=.kitchen.digitalocean.yml bundle exec '\
-          'kitchen converge -c 10 fedora-27'
+          'kitchen converge fedora-27'
 end
 
 desc 'Build VM with cookbook'
 task :verify do
   puts 'run kitchen tasks'
   sh 'KITCHEN_LOCAL_YAML=.kitchen.digitalocean.yml bundle exec '\
-          'kitchen verify -c 10 fedora-27'
+          'kitchen verify fedora-27'
 end
 
 desc 'Destroy VM'
 task :destroy do
   puts 'run kitchen tasks'
   sh 'KITCHEN_LOCAL_YAML=.kitchen.digitalocean.yml bundle exec '\
-          'kitchen destroy -c 10 fedora-27'
+          'kitchen destroy fedora-27'
 end
 
 # desc 'Verify the cookbook with Inspec'
