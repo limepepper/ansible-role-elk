@@ -25,7 +25,7 @@ elsif ENV['BUILDBOT_ENV']
   gem 'inspec'
   gem 'kitchen-digitalocean',
       git: 'https://github.com/limepepper/kitchen-digitalocean',
-      branch: 'firewall-add'
+      branch: 'add-tags-attribute-to-driver'
   gem 'kitchen-inspec'
 end
 
