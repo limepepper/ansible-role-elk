@@ -5,3 +5,5 @@ Bundler/DuplicatedGem:
 Style/GlobalVars:
   Exclude:
     - 'vagrant/vagrant.rb'
+Layout/LeadingBlankLines:
+  Enabled: false

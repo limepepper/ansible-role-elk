@@ -1,4 +1,3 @@
-cookbook = ENV['COOKBOOK']
 
 desc 'Rubocop of new code'
 task :rubocop do
@@ -14,7 +13,7 @@ end
 desc 'Run setup'
 task :setup do
   # Your code goes here
-  puts "bundle exec stuff"
+  puts 'bundle exec stuff'
   sh 'bundle install'
   sh 'bundle update'
 end
@@ -28,19 +27,22 @@ end
 desc 'Build VM with cookbook'
 task :converge do
   puts 'run kitchen tasks'
-  sh 'KITCHEN_LOCAL_YAML=.kitchen.digitalocean.yml bundle exec kitchen converge -c 10 fedora-27'
+  sh 'KITCHEN_LOCAL_YAML=.kitchen.digitalocean.yml bundle exec '\
+          'kitchen converge -c 10 fedora-27'
 end
 
 desc 'Build VM with cookbook'
 task :verify do
   puts 'run kitchen tasks'
-  sh 'KITCHEN_LOCAL_YAML=.kitchen.digitalocean.yml bundle exec kitchen verify -c 10 fedora-27'
+  sh 'KITCHEN_LOCAL_YAML=.kitchen.digitalocean.yml bundle exec '\
+          'kitchen verify -c 10 fedora-27'
 end
 
 desc 'Destroy VM'
 task :destroy do
   puts 'run kitchen tasks'
-  sh 'KITCHEN_LOCAL_YAML=.kitchen.digitalocean.yml bundle exec kitchen destroy -c 10 fedora-27'
+  sh 'KITCHEN_LOCAL_YAML=.kitchen.digitalocean.yml bundle exec '\
+          'kitchen destroy -c 10 fedora-27'
 end
 
 # desc 'Verify the cookbook with Inspec'
