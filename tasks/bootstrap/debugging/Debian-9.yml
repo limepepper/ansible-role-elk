@@ -1,0 +1,45 @@
+---
+
+- debug:
+    msg: "here is the message"
+
+- name: debian-9 annoyances block
+  become: yes
+  tags: [ annoyances ]
+  block:
+
+    # Debian seems to need an apt-get update kick
+    - name: Update packages list (Debian)
+      apt: update_cache=yes
+      when: ansible_os_family == 'Debian'
+
+    # - apt:
+    #     name:
+    #       - man
+
+    # # fix for https://github.com/pypa/pip/issues/4817
+    # - name: Force upgrade of pip on Debian
+    #   pip:
+    #     name: pip
+    #     version: '9.0.1'
+    #     extra_args: -i https://pypi.python.org/simple/
+
+    - name: install Tools for Debian
+      action: >
+        {{ ansible_pkg_mgr }} name={{ item }} state=present
+      with_items:
+        - mlocate
+        - telnet
+        - apt-file
+        - lsof
+        - man
+        - whois
+        - net-tools
+
+    # debian-9 compatible seems to have mouse=a set
+    # annoyance scale (4/11)
+    # - name: use vim.tiny for vi
+    #   alternatives:
+    #     name: vi
+    #     path: /usr/bin/vim.tiny
+    #   when: false

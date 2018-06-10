@@ -1,0 +1,16 @@
+---
+
+- tags: [ bootstrap ]
+  become: True
+  block:
+
+  - debug:
+      msg: "using the generic boot strapper, this is probably not enough"
+
+  - name: install shim packages
+    action: >
+      {{ ansible_pkg_mgr }} name={{ item }} state=present
+    with_items:
+      - python-pip
+      - unzip
+      - git

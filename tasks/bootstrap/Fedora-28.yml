@@ -1,0 +1,13 @@
+---
+
+- tags: main-run
+  become: True
+  block:
+
+  - name: install bootstrap shim packages
+    action: >
+      {{ ansible_pkg_mgr }} name={{ item }} state=present
+    with_items:
+      - libselinux-python
+      - selinux-policy
+      - python2-libsemanage

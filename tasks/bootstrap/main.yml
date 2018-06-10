@@ -1,0 +1,29 @@
+---
+
+- tags: [ bootstrap ]
+  become: True
+  block:
+
+  - name: create a list of logfiles for this host
+    set_fact:
+      logfiles: "{{ logfiles|default([]) }}"
+        # @todo this obviously platform specific
+        # - path: /var/log/messages
+        # - path: /var/log/secure
+        # @todo currently just checking logs are unique when processing
+
+  - name: distro specific bootstrapping
+    include_tasks: "{{ include_tasks_bootstrap }}"
+    with_first_found:
+      - "{{ ansible_distribution }}-{{ ansible_distribution_version}}.yml"
+      - "{{ ansible_distribution }}-{{ ansible_distribution_major_version}}.yml"
+      - "{{ ansible_distribution }}.yml"
+      - "{{ ansible_os_family }}.yml"
+      - "{{ ansible_system }}.yml"
+    loop_control:
+      loop_var: include_tasks_bootstrap
+
+  - name: flag to indicate some role ran bootstrapping
+    set_fact:
+      bootstrap_done: true
+    tags: [ always ]

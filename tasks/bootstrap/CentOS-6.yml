@@ -1,0 +1,28 @@
+---
+
+- tags: main-run
+  become: True
+  block:
+
+  - name: install epel
+    action: >
+      {{ ansible_pkg_mgr }} name={{ item }} state=present
+    with_items:
+      - epel-release
+
+  - name: install shim packages
+    action: >
+      {{ ansible_pkg_mgr }} name={{ item }} state=present
+    with_items:
+      - libselinux-python
+      - selinux-policy
+      - python-pip
+      - unzip
+      - git
+      - lsof
+      - net-tools
+      - curl
+
+  - selinux:
+      policy: targeted
+      state: permissive

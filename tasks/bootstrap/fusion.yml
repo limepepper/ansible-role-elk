@@ -1,0 +1,41 @@
+---
+
+- tags: [ fusion ]
+  become: yes
+  block:
+
+    - name: install rpm fusion free and non free
+      action: >
+        {{ ansible_pkg_mgr }} name={{ item }} state=present
+      with_items:
+        - https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-28.noarch.rpm
+        - https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-28.noarch.rpm
+      when:
+        - "ansible_distribution == 'Fedora'"
+        - "ansible_distribution_major_version == '28'"
+
+
+    - name: install rpm fusion free and non free
+      action: >
+        {{ ansible_pkg_mgr }} name={{ item }} state=present
+      with_items:
+        - https://download1.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm
+        - https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-7.noarch.rpm
+      when:
+        - "ansible_distribution == 'CentOS'"
+        - "ansible_distribution_major_version == '7'"
+
+
+    - name: install rpm fusion free and non free
+      action: >
+        {{ ansible_pkg_mgr }} name={{ item }} state=present
+      with_items:
+        - https://download1.rpmfusion.org/free/el/rpmfusion-free-release-6.noarch.rpm
+        - https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-6.noarch.rpm
+      when:
+        - "ansible_distribution == 'CentOS'"
+        - "ansible_distribution_major_version == '6'"
+
+
+
+

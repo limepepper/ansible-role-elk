@@ -1,0 +1,9 @@
+---
+
+- tags: [ always ]
+  block:
+
+  - debug:
+      msg: here be in windows message bollocks
+
+#  - win_chocolatey: name=pscx
