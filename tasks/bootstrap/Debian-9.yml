@@ -7,15 +7,16 @@
   - debug:
       msg: "using the Debian-9 boot strapper"
 
-  - name: install deps packages
-    action: >
-      {{ ansible_pkg_mgr }} name={{ item }} state=present
-    with_items:
-      - python-pip
-      - unzip
-      - git
-      - curl
-      - net-tools
+  - name: install shim packages
+    apt:
+      # update_cache: yes
+      install_recommends: no
+      name:
+        - python-pip
+        - unzip
+        - git
+        - curl
+        - net-tools
 
     ##    ___      _    _                           _  __ _ _
     ##   |   \ ___| |__(_)__ _ _ _    __ _ _ __  __| |/ /| | |

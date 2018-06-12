@@ -8,10 +8,11 @@
       msg: "using the Ubuntu boot strapper"
 
   - name: install shim packages
-    action: >
-      {{ ansible_pkg_mgr }} name={{ item }} state=present
-    with_items:
-      - python-pip
-      - unzip
-      - git
-      - curl
+    apt:
+      # update_cache: yes
+      install_recommends: no
+      name:
+        - python-pip
+        - unzip
+        - git
+        - curl
