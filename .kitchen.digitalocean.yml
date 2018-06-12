@@ -37,8 +37,8 @@ platforms:
 # http://buildbot:8010/badges/ansible_role_elk_centos-7_default.svg
 # http://buildbot:8010/badges/ansible_role_elk_debian-9_default.svg
 
-suites:
-  - name: default
-    extra_vars:
-      elk_features:
-        - elasticsearch
+# suites:
+#   - name: default
+#     extra_vars:
+#       elk_features:
+#         - elasticsearch
