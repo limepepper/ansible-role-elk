@@ -30,7 +30,7 @@
       name: ingest-user-agent
       state: present
 
-  - elasticsearch_plugin:
+  - elasticsearch_plugin2:
       name: ingest-geoip
       state: present
 
