@@ -25,6 +25,13 @@ end
 # end
 
 desc 'Build VM with cookbook'
+task :create do
+  puts 'run kitchen task create'
+  sh 'KITCHEN_LOCAL_YAML=.kitchen.digitalocean.yml bundle exec '\
+          "kitchen create #{ENV['suite']}-#{ENV['platform']}"
+end
+
+desc 'Converge VM with cookbook'
 task :converge do
   puts 'run kitchen tasks'
   sh 'KITCHEN_LOCAL_YAML=.kitchen.digitalocean.yml bundle exec '\
