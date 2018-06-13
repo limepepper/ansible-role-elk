@@ -57,7 +57,10 @@ suites:
   - name: default
     extra_vars:
       elk_features:
-        - elasticsearch
+          - filebeat
+          - elasticsearch
+          - logstash
+          - kibana
   - name: elasticsearch
     extra_vars:
       elk_features:
@@ -77,7 +80,7 @@ suites:
     extra_vars:
       elk_features:
         - filebeat
-  - name: fullstack-felk
+  - name: fullstack
     provisioner:
       extra_vars:
         elk_features:

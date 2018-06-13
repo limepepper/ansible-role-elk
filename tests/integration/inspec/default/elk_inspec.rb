@@ -3,7 +3,7 @@
 #                 'Billy' => 58 }
 
 # feature wth tests
-features = %w[logstash kibana elasticsearch filebeat]
+features = %w{logstash kibana elasticsearch filebeat}
 
 skiplist = attribute('skiplist',
                      description: 'list of controls to skip',

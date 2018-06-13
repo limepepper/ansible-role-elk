@@ -3,7 +3,6 @@
 # ansible role for Elasticsearch Logstash Kibana
 
 
-[![Build Status](https://travis-ci.org/geerlingguy/ansible-role-elasticsearch.svg?branch=master)](https://travis-ci.org/geerlingguy/ansible-role-elasticsearch)
 
 This role installs the ELK on linux distros. By default its a single stack on
 a machine, but can be configured to separate the parts. The aim is to support
