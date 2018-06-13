@@ -7,7 +7,7 @@
   gather_facts: false
   pre_tasks:
   - name: Install python2 for Ansible
-    raw: bash -c "test -e /usr/bin/python || ( ( test -e /usr/bin/apt && apt -qqy update && apt install -qqy python-minimal) || ( test -e /usr/bin/dnf && /usr/bin/dnf -qy install python) || ( test -e /usr/bin/yum && /usr/bin/yum -qy install python) )"
+    raw: bash -c "test -e /usr/bin/python || ( ( test -e /usr/bin/apt && apt -y update && apt -y update && ( apt install -Vy python-minimal || apt install -Vy python ) ) || ( test -e /usr/bin/dnf && /usr/bin/dnf -qy install python) || ( test -e /usr/bin/yum && /usr/bin/yum -qy install python) )"
     register: output
     changed_when: 'output.stdout|trim() != ""'
   - name: Gathering Facts
@@ -33,6 +33,6 @@
 
         - name: write out the hostvars to json for inspec testing
           copy:
-            content: "{{ hostvars[inventory_hostname] | to_nice_json }}"
+            content: "{{ hostvars[inventory_hostname] | strip_fieldattributes | to_nice_json }}"
             dest: "/var/cache/ansible/attributes/hostvars.json"
           tags: always

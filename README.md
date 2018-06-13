@@ -3,7 +3,18 @@
 # ansible role for Elasticsearch Logstash Kibana
 
 
-[![Build Status](https://travis-ci.org/geerlingguy/ansible-role-elasticsearch.svg?branch=master)](https://travis-ci.org/geerlingguy/ansible-role-elasticsearch)
+|                |  Elasticsearch   |Logstash      | Kibana | Full-Stack |
+|----------------|-------------------------------|-----------------------------|---|--|
+|CentOS-6 |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_centos-7_default.svg)](http://buildbot:8010/#/builders/29)           |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_ubuntu-17_default.svg)](http://buildbot:8010/#/builders/29)            |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_debian-9_default.svg)](http://buildbot:8010/#/builders/29)|[![Build Status](http://buildbot:8010/badges/ansible_role_elk_debian-9_default.svg)](http://buildbot:8010/#/builders/29)
+|CentOS-7 |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_centos-7_default.svg)](http://buildbot:8010/#/builders/29)           |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_ubuntu-17_default.svg)](http://buildbot:8010/#/builders/29)            |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_debian-9_default.svg)](http://buildbot:8010/#/builders/29) |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_debian-9_default.svg)](http://buildbot:8010/#/builders/29)
+|Debian-8 |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_centos-7_default.svg)](http://buildbot:8010/#/builders/29)           |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_ubuntu-17_default.svg)](http://buildbot:8010/#/builders/29)            |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_debian-9_default.svg)](http://buildbot:8010/#/builders/29) |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_debian-9_default.svg)](http://buildbot:8010/#/builders/29)
+|Debian-9 |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_centos-7_default.svg)](http://buildbot:8010/#/builders/29)           |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_ubuntu-17_default.svg)](http://buildbot:8010/#/builders/29)            |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_debian-9_default.svg)](http://buildbot:8010/#/builders/29) |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_debian-9_default.svg)](http://buildbot:8010/#/builders/29)
+|Ubuntu-16 LTS |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_centos-7_default.svg)](http://buildbot:8010/#/builders/29)           |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_ubuntu-17_default.svg)](http://buildbot:8010/#/builders/29)            |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_debian-9_default.svg)](http://buildbot:8010/#/builders/29) |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_debian-9_default.svg)](http://buildbot:8010/#/builders/29)
+|Ubuntu-17 |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_centos-7_default.svg)](http://buildbot:8010/#/builders/29)           |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_ubuntu-17_default.svg)](http://buildbot:8010/#/builders/29)            |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_debian-9_default.svg)](http://buildbot:8010/#/builders/29) |[![Build Status](http://buildbot:8010/badges/ansible_role_elk_debian-9_default.svg)](http://buildbot:8010/#/builders/29)
+
+
+
+
 
 This role installs the ELK on linux distros. By default its a single stack on
 a machine, but can be configured to separate the parts. The aim is to support

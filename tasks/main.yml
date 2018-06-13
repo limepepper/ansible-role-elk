@@ -26,18 +26,6 @@
       loop_var: elk_feature
     tags: always
 
-
-
-  # - name: include elasticsearch-head tasks
-  #   include_tasks: elasticsearch-head.yml
-  #   when:
-  #     - elasticsearch_plugin_head == true
-  #     - ansible_distribution != 'Debian'
-  #     - ansible_distribution_major_version != ''
-  #   tags:
-  #     - elasticsearch-head
-
-
     ## END OF MAIN TASKS SECTION ##
 
   # boilerplate
